@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Input from "./components/Input";
 import ListItem from "./components/ListItem";
@@ -190,37 +190,61 @@ function App() {
     },
   ];
 
+  const [commitData, setCommitData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [counterSec, setCounterSec] = useState(30);
+
+  const refreshButtonHandler = (counterFunction) => {
+    if (refresh) {
+      setRefresh(false);
+    } else {
+      setRefresh(true);
+    }
+    setCounterSec(30);
+  };
+
   useEffect(() => {
     let url = "https://api.github.com/repos/Mr-Apoorv/userList/commits";
+
     fetch(url)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
         console.log(data);
+        setCommitData(data);
       })
       .catch((error) => {
         console.log(error);
       });
 
     return () => {};
-  }, []);
+  }, [refresh]);
 
   return (
     <div>
       <NavBar />
       <Input />
       <div className="d-flex gap-2 container">
-        <button className="btn btn-dark col-md-6" type="button">
-          Refresh
+        <button
+          className="btn btn-dark col-md-6"
+          type="button"
+          onClick={refreshButtonHandler}
+        >
+          Refresh now
         </button>
         <div className="text-center d-flex flex-column justify-content-center">
           <div className="d-flex">
-            <strong>Page will refresh in : </strong> &nbsp; <Counter />
+            <strong>Page will refresh in : </strong> &nbsp;{" "}
+            <Counter
+              refreshButtonHandler={refreshButtonHandler}
+              counterSec={counterSec}
+              setCounterSec={setCounterSec}
+            />
           </div>
         </div>
       </div>
-      <ListItem gitCommitsData={gitCommitsData} />
+      <ListItem gitCommitsData={commitData} />
     </div>
   );
 }

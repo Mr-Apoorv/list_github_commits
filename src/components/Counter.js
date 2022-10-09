@@ -1,22 +1,23 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 
-const Counter = () => {
-  const [counterSec, setCounterSec] = useState(30);
-  // const [sec, setSec] = useState(30);
-  const countRef = useRef(counterSec);
-  countRef.current = counterSec;
-  setTimeout(() => {
-    if (counterSec !== 1) {
-      setCounterSec(countRef.current - 1);
-    } else {
-      setCounterSec(30);
-    }
-    // console.log(counterMilliSec);
-  }, 1000);
+const Counter = (props) => {
+  const countRef = useRef(props.counterSec);
+  countRef.current = props.counterSec;
+  const timer = () => {
+    setTimeout(() => {
+      if (props.counterSec !== 1) {
+        props.setCounterSec(countRef.current - 1);
+      } else {
+        props.refreshButtonHandler();
+      }
+    }, 1000);
+  };
+  timer();
+
   return (
     <div>
-      <span>{counterSec} seconds</span>
+      <span>{props.counterSec} seconds</span>
     </div>
   );
 };
