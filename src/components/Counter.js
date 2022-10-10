@@ -13,7 +13,13 @@ const Counter = (props) => {
       }
     }, 1000);
   };
-  timer();
+  //   timer();
+
+  useEffect(() => {
+    timer();
+
+    return () => {};
+  }, [props.counterSec]);
 
   return (
     <div>

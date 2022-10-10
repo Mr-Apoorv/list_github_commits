@@ -3,6 +3,7 @@ import NavBar from "./components/NavBar";
 import Input from "./components/Input";
 import ListItem from "./components/ListItem";
 import Counter from "./components/Counter";
+import { Octokit } from "@octokit/core";
 
 function App() {
   let gitCommitsData = [
@@ -193,6 +194,7 @@ function App() {
   const [commitData, setCommitData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [counterSec, setCounterSec] = useState(30);
+  const [showCommits, setShowCommits] = useState(false);
 
   const refreshButtonHandler = (counterFunction) => {
     if (refresh) {
@@ -201,22 +203,43 @@ function App() {
       setRefresh(true);
     }
     setCounterSec(30);
+    window.location.reload();
   };
 
   useEffect(() => {
-    let url = "https://api.github.com/repos/Mr-Apoorv/userList/commits";
-
-    fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setCommitData(data);
-      })
-      .catch((error) => {
-        console.log(error);
+    async function fetchData() {
+      // Octokit.js
+      // https://github.com/octokit/core.js#readme
+      const octokit = new Octokit({
+        auth: "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",
       });
+
+      console.log(`octokit.auth`, octokit.auth);
+
+      let response = await octokit.request(
+        "GET /repos/{owner}/{repo}/commits",
+        {
+          owner: "Mr-Apoorv",
+          repo: "userList",
+        }
+      );
+
+      let data = await response.data;
+      console.log(`data from octo - `, data);
+      setCommitData(data);
+    }
+
+    const checkKey = () => {
+      let pKey = localStorage.getItem("key");
+      if (!pKey) {
+        setShowCommits(false);
+      } else {
+        setShowCommits(true);
+      }
+    };
+
+    fetchData();
+    checkKey();
 
     return () => {};
   }, [refresh]);
@@ -224,7 +247,7 @@ function App() {
   return (
     <div>
       <NavBar />
-      <Input />
+      <Input setShowCommits={setShowCommits} />
       <div className="d-flex gap-2 container">
         <button
           className="btn btn-dark col-md-6"
@@ -244,7 +267,7 @@ function App() {
           </div>
         </div>
       </div>
-      <ListItem gitCommitsData={commitData} />
+      {showCommits && <ListItem gitCommitsData={commitData} />}
     </div>
   );
 }
