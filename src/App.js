@@ -203,7 +203,7 @@ function App() {
       setRefresh(true);
     }
     setCounterSec(30);
-    // window.location.reload();
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -223,7 +223,7 @@ function App() {
         "GET /repos/{owner}/{repo}/commits",
         {
           owner: "Mr-Apoorv",
-          repo: "userList",
+          repo: "list_github_commits",
         }
       );
 

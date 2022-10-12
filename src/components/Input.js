@@ -11,7 +11,7 @@ const Input = (props) => {
 
     let pKey = localStorage.getItem("key");
 
-    if (!pKey) {
+    if (!pKey && inputVal.length === 40) {
       localStorage.setItem("key", JSON.stringify(inputVal));
       props.setShowCommits(true);
       setInputVal("");
