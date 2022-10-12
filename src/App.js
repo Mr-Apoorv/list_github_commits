@@ -207,9 +207,9 @@ function App() {
   };
 
   useEffect(() => {
-    console.log(
-      `useeffect - refresh :: ${refresh} ::  showCommits :: ${showCommits}`
-    );
+    // console.log(
+    //   `useeffect - refresh :: ${refresh} ::  showCommits :: ${showCommits}`
+    // );
     async function fetchData() {
       // Octokit.js
       // https://github.com/octokit/core.js#readme
@@ -217,7 +217,7 @@ function App() {
         auth: localStorage.getItem("key"),
       });
 
-      console.log(`octokit.auth`, octokit.auth);
+      // console.log(`octokit.auth`, octokit.auth);
 
       let response = await octokit.request(
         "GET /repos/{owner}/{repo}/commits",
@@ -243,25 +243,7 @@ function App() {
       }
     };
 
-    // fetchData().catch((error) => {
-    //   console.log(`Received error in ajax call`, error);
-    // });
     checkKey();
-
-    // let url = "https://api.github.com/repos/Mr-Apoorv/userList/commits";
-    // fetch(url, {
-    //   headers: {
-    //     authorization: "token keyvalue",
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response.status);
-    //     response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(`data from octo - `, data);
-    //     setCommitData(data !== undefined ? data : []);
-    //   });
 
     return () => {};
   }, [refresh]);
