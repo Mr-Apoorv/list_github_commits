@@ -203,15 +203,18 @@ function App() {
       setRefresh(true);
     }
     setCounterSec(30);
-    window.location.reload();
+    // window.location.reload();
   };
 
   useEffect(() => {
+    console.log(
+      `useeffect - refresh :: ${refresh} ::  showCommits :: ${showCommits}`
+    );
     async function fetchData() {
       // Octokit.js
       // https://github.com/octokit/core.js#readme
       const octokit = new Octokit({
-        auth: "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",
+        auth: localStorage.getItem("key"),
       });
 
       console.log(`octokit.auth`, octokit.auth);
@@ -229,6 +232,8 @@ function App() {
       setCommitData(data);
     }
 
+    fetchData();
+
     const checkKey = () => {
       let pKey = localStorage.getItem("key");
       if (!pKey) {
@@ -238,8 +243,25 @@ function App() {
       }
     };
 
-    fetchData();
+    // fetchData().catch((error) => {
+    //   console.log(`Received error in ajax call`, error);
+    // });
     checkKey();
+
+    // let url = "https://api.github.com/repos/Mr-Apoorv/userList/commits";
+    // fetch(url, {
+    //   headers: {
+    //     authorization: "token keyvalue",
+    //   },
+    // })
+    //   .then((response) => {
+    //     console.log(response.status);
+    //     response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(`data from octo - `, data);
+    //     setCommitData(data !== undefined ? data : []);
+    //   });
 
     return () => {};
   }, [refresh]);
@@ -247,7 +269,10 @@ function App() {
   return (
     <div>
       <NavBar />
-      <Input setShowCommits={setShowCommits} />
+      <Input
+        setShowCommits={setShowCommits}
+        refreshButtonHandler={refreshButtonHandler}
+      />
       <div className="d-flex gap-2 container">
         <button
           className="btn btn-dark col-md-6"

@@ -7,13 +7,15 @@ const Input = (props) => {
   };
   let pKey = localStorage.getItem("key");
   const submitHandler = (event) => {
-    let PAT = "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";
+    console.log("Submit button clicked");
+
     let pKey = localStorage.getItem("key");
-    pKey = JSON.parse(pKey);
-    if (!pKey && inputVal === PAT) {
+
+    if (!pKey) {
       localStorage.setItem("key", JSON.stringify(inputVal));
       props.setShowCommits(true);
       setInputVal("");
+      props.refreshButtonHandler();
     } else {
       alert("Incorrect password");
       setInputVal("");
